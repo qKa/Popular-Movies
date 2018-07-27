@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Popular Movies</string>
+    <string name="most_popular">Most popular</string>
+    <string name="top_rated">Top rated</string>
+    <string name="poster_base_url">http://image.tmdb.org/t/p/</string>
+    <string name="poster_size">w500/</string>
+    <string name="backdrop_url">http://image.tmdb.org/t/p/original</string>
+    <string name="title_activity_details">Movie details</string>
+    <string name="title_label_text_debug">Movie title (TEST)</string>
+    <string name="releaseDate_text_debug">2018 (TEST)</string>
+    <string name="average_text_debug">4.1/10 (TEST)</string>
+    <string name="poster_text_debug">Poster comes here (TEST)</string>
+    <string name="lorem_ipsum">Culpa voluptate reprehenderit dolore pariatur laborum eu veniam tempor sit nostrud laborum enim in. Tempor eu ea consectetur irure. Amet ea esse non mollit dolor. Et deserunt mollit velit tempor. Commodo deserunt irure do anim laborum irure incididunt occaecat nostrud aliqua incididunt. Anim laboris elit elit cupidatat commodo. Consectetur proident ipsum deserunt duis cillum sint enim.</string>
+    <string name="card_movie_title_debug">Lorem ipsum dolor sit amet</string>
 </resources>

@@ -1,0 +1,7 @@
+<resources>
+    <dimen name="card_margin">5dp</dimen>
+    <dimen name="card_elevation">3dp</dimen>
+    <dimen name="card_image_height">160dp</dimen>
+    <dimen name="card_title_textSize">15sp</dimen>
+    <dimen name="card_title_padding">10dp</dimen>
+</resources>
