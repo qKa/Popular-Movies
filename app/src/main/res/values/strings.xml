@@ -12,4 +12,7 @@
     <string name="poster_text_debug">Poster comes here (TEST)</string>
     <string name="lorem_ipsum">Culpa voluptate reprehenderit dolore pariatur laborum eu veniam tempor sit nostrud laborum enim in. Tempor eu ea consectetur irure. Amet ea esse non mollit dolor. Et deserunt mollit velit tempor. Commodo deserunt irure do anim laborum irure incididunt occaecat nostrud aliqua incididunt. Anim laboris elit elit cupidatat commodo. Consectetur proident ipsum deserunt duis cillum sint enim.</string>
     <string name="card_movie_title_debug">Lorem ipsum dolor sit amet</string>
+    <string name="favorites">Favorites</string>
+    <string name="movie_details_videos_label">Videos</string>
+    <string name="movie_details_reviews_label">Reviews</string>
 </resources>

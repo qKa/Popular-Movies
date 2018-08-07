@@ -25,6 +25,10 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:parentActivityName=".MainActivity">
         </activity>
+
+        <provider android:name="xyz.vrana.popularmovies.database.MovieProvider"
+            android:authorities="xyz.vrana.popularmovies"
+            android:exported="false"/>
     </application>
 
 </manifest>

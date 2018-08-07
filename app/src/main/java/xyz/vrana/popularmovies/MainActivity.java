@@ -2,7 +2,10 @@ package xyz.vrana.popularmovies;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
+import android.net.Uri;
+import android.os.Parcelable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -28,6 +32,7 @@ import xyz.vrana.popularmovies.api.MoviesAPI;
 import xyz.vrana.popularmovies.api.TmdbService;
 import xyz.vrana.popularmovies.api.models.Movie;
 import xyz.vrana.popularmovies.api.models.MoviesResponse;
+import xyz.vrana.popularmovies.database.FavoritesContract;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
 
     private MoviesAdapter recyclerViewAdapter;
     private TmdbService service = MoviesAPI.getClient().create(TmdbService.class);
+    private List<Movie> mMoviesList = new ArrayList<>();
+    private Parcelable recyclerViewState;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -49,6 +56,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (savedInstanceState != null) {
+            recyclerViewState = savedInstanceState.getParcelable("MOVIE_LIST_STATE");
+        }
+
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
@@ -60,6 +71,12 @@ public class MainActivity extends AppCompatActivity {
             initView();
             getMovies("popular");
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("MOVIE_LIST_STATE", mRecyclerView.getLayoutManager().onSaveInstanceState());
     }
 
     public boolean checkInternetConnection() {
@@ -89,7 +106,6 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
                 List<Movie> movies = response.body().getResults();
                 mRecyclerView.setAdapter(new MoviesAdapter(movies, R.layout.movie_card, getApplicationContext()));
-
                 loadingIndicator.setVisibility(View.INVISIBLE);
                 mRecyclerView.setVisibility(View.VISIBLE);
             }
@@ -117,9 +133,38 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_top_rated:
                 getMovies("top_rated");
                 break;
+            case R.id.action_favorites:
+                loadFavoritesFromDB();
             default:
                 break;
         }
         return true;
+    }
+
+    public void loadFavoritesFromDB() {
+        List movies = new ArrayList();
+        Uri uri = FavoritesContract.FavoritesEntry.CONTENT_URI;
+        Cursor result = getContentResolver().query(uri, null, null, null, null);
+
+        mMoviesList.clear();
+        loadingIndicator.setVisibility(View.VISIBLE);
+
+        if (result != null) {
+            while (result.moveToNext()) {
+                int id = result.getInt(result.getColumnIndex("movieId"));
+                String posterPath = result.getString(result.getColumnIndex("posterUrl"));
+                String title = result.getString(result.getColumnIndex("movieName"));
+                Double rating = result.getDouble(result.getColumnIndex("rating"));
+                String releaseDate = result.getString(result.getColumnIndex("releaseDate"));
+                movies.add(new Movie(id, title, posterPath, rating, releaseDate));
+            }
+        }
+        result.close();
+
+        mRecyclerView.setAdapter(new MoviesAdapter(movies, R.layout.movie_card, getApplicationContext()));
+        mRecyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
+        mMoviesList.addAll(movies);
+        mRecyclerView.setVisibility(View.VISIBLE);
+        loadingIndicator.setVisibility(View.INVISIBLE);
     }
 }
